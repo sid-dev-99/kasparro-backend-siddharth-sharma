@@ -8,7 +8,11 @@
 A robust, production-ready backend service that ingests cryptocurrency data from multiple sources (CoinPaprika, CoinGecko, CSV), normalizes it, and exposes it via a secure REST API.
 
 **Live Demo:** [https://web-production-b1b7f.up.railway.app/docs](https://web-production-b1b7f.up.railway.app/docs)  
-*(Note: You need an API Key to access the live demo. Use `test-key` for testing if configured.)*
+**How to use:**
+1.  Click the **Authorize** button on the top right.
+2.  Enter `test-key` in the value box.
+3.  Click **Authorize** and then **Close**.
+4.  Now you can try any endpoint (e.g., `GET /health`)!
 
 ## 🚀 Features
 
