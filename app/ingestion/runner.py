@@ -65,3 +65,6 @@ def run_etl():
         loader.update_etl_status(db, "failed", str(e), duration=duration)
     finally:
         db.close()
+
+if __name__ == "__main__":
+    run_etl()
