@@ -1,56 +1,113 @@
 # Crypto ETL Backend
 
-This project implements a backend service that ingests crypto data from CoinPaprika API and a CSV source, normalizes it, stores it in Postgres, and exposes it via a REST API.
+![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-green.svg)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-blue.svg)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue.svg)
 
-## Features
+A robust, production-ready backend service that ingests cryptocurrency data from multiple sources (CoinPaprika, CoinGecko, CSV), normalizes it, and exposes it via a secure REST API.
 
-- **ETL Pipeline**: Fetches data from API and CSV, normalizes it, and stores it in Postgres.
-- **Incremental Ingestion**: Uses Upsert logic to update existing records without duplication.
-- **REST API**: Exposes data via `GET /data` with pagination and filtering.
-- **Health Check**: `GET /health` reports DB connectivity and ETL status.
-- **Dockerized**: Runs entirely via Docker Compose.
+**Live Demo:** [https://web-production-b1b7f.up.railway.app/docs](https://web-production-b1b7f.up.railway.app/docs)  
+*(Note: You need an API Key to access the live demo. Use `test-key` for testing if configured.)*
 
-## Setup & Running
+## 🚀 Features
+
+*   **Multi-Source Ingestion**: Fetches market data from CoinPaprika API, CoinGecko API, and local CSV files.
+*   **Robust ETL Pipeline**:
+    *   **Resilience**: Implements retries with exponential backoff for API calls.
+    *   **Drift Detection**: Automatically detects and logs schema changes in upstream APIs.
+    *   **Checkpointing**: Tracks ETL run status to resume or analyze failures.
+*   **Secure API**: Protected by API Key authentication (`X-API-Key` header).
+*   **Observability**:
+    *   `/stats`: Real-time ETL statistics.
+    *   `/metrics`: Prometheus-compatible metrics endpoint.
+    *   `/runs`: History of past ETL execution runs.
+*   **Deployment Ready**: Dockerized and configured for easy deployment on Railway, AWS, or DigitalOcean.
+
+## 🛠️ Tech Stack
+
+*   **Framework**: FastAPI
+*   **Database**: PostgreSQL (via SQLAlchemy ORM)
+*   **Validation**: Pydantic v2
+*   **Testing**: Pytest
+*   **Containerization**: Docker & Docker Compose
+
+## 🔑 Authentication
+
+All API endpoints are protected. You must include the `X-API-Key` header in your requests.
+
+```bash
+curl -H "X-API-Key: your-secret-key" http://localhost:8000/data
+```
+
+*Default key for local development: `test-key`*
+
+## 🏃‍♂️ Local Setup
 
 ### Prerequisites
-- Docker and Docker Compose
-- Make (optional, for convenience)
+*   Docker & Docker Compose
+*   Make (optional)
 
-### Commands
+### Quick Start
 
-1.  **Start the System**:
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/your-username/kasparro-backend.git
+    cd kasparro-backend
+    ```
+
+2.  **Start with Docker**:
     ```bash
     make up
     # OR
     docker-compose up --build -d
     ```
-    The API will be available at `http://localhost:8000`.
-    The ETL pipeline starts automatically in the background.
 
-2.  **Stop the System**:
-    ```bash
-    make down
-    # OR
-    docker-compose down
-    ```
+3.  **Access the API**:
+    *   Swagger UI: `http://localhost:8000/docs`
+    *   Health Check: `http://localhost:8000/health`
 
-3.  **Run Tests**:
+4.  **Run Tests**:
     ```bash
     make test
-    # OR
-    docker-compose run --rm app pytest
     ```
 
-## API Endpoints
+## 📡 API Endpoints
 
--   `GET /data`: Retrieve crypto assets.
-    -   Query Params: `page` (default 1), `limit` (default 10), `symbol` (optional).
--   `GET /health`: Check system health.
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/data` | Retrieve paginated crypto assets with filtering. |
+| `GET` | `/stats` | Get current ETL statistics (total records, sources). |
+| `GET` | `/metrics` | Prometheus metrics for monitoring. |
+| `GET` | `/runs` | List history of ETL execution runs. |
+| `GET` | `/compare-runs` | Compare data between two specific ETL runs. |
+| `POST` | `/etl/run` | Manually trigger the ETL pipeline (background task). |
+| `GET` | `/health` | Check database connectivity and system status. |
 
-## Design Decisions
+## ☁️ Deployment
 
--   **FastAPI**: For high performance and easy API creation.
--   **SQLAlchemy**: ORM for database interactions.
--   **Pydantic**: For data validation and schema definition.
--   **Postgres**: Robust relational database.
--   **ETL Runner**: Runs as a background thread on app startup for simplicity in a single-container setup. In a production environment, this would likely be a separate Celery worker or Airflow DAG.
+This project is deployed on **Railway**.
+
+*   **Web Service**: Handles API requests.
+*   **Cron Service**: Runs the ETL pipeline every hour.
+*   **PostgreSQL**: Managed database.
+
+For detailed deployment instructions, see [deployment_guide.md](deployment_guide.md).
+
+## 📂 Project Structure
+
+```
+├── app/
+│   ├── api/            # API Routes
+│   ├── core/           # Config, Database, Security
+│   ├── ingestion/      # ETL Logic (Extractor, Transformer, Loader)
+│   ├── models.py       # SQLAlchemy Models
+│   ├── schemas/        # Pydantic Schemas
+│   └── main.py         # App Entrypoint
+├── tests/              # Pytest Suite
+├── data/               # Local data sources (CSV)
+├── Dockerfile
+├── docker-compose.yml
+├── Procfile            # Railway Deployment Config
+└── start.sh            # Startup Script
+```
