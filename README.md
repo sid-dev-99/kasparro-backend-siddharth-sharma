@@ -88,6 +88,8 @@ curl -H "X-API-Key: your-secret-key" http://localhost:8000/data
 
 This project is deployed on **Railway**.
 
+**Base URL:** `https://web-production-b1b7f.up.railway.app`
+
 *   **Web Service**: Handles API requests.
 *   **Cron Service**: Runs the ETL pipeline every hour.
 *   **PostgreSQL**: Managed database.
