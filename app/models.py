@@ -32,7 +32,7 @@ class CryptoAsset(Base):
     name = Column(String)
     price_usd = Column(Float)
     market_cap = Column(Float, nullable=True)
-    source = Column(String) # 'coinpaprika' or 'csv'
+    source = Column(String) # 'coingecko', 'coinpaprika', or 'csv'
     last_updated = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 class ETLStatus(Base):
