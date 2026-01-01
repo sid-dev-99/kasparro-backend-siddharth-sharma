@@ -68,3 +68,29 @@ def transform_csv_data(raw_data: List[Dict[str, Any]]) -> List[CryptoAssetCreate
             print(f"Error transforming CSV item {item}: {e}")
             continue
     return transformed
+
+def unify_assets(
+    paprika_data: List[CryptoAssetCreate],
+    gecko_data: List[CryptoAssetCreate],
+    csv_data: List[CryptoAssetCreate]
+) -> List[CryptoAssetCreate]:
+    """
+    Unifies assets from multiple sources based on symbol.
+    Priority: CoinGecko > CoinPaprika > CSV
+    """
+    unified_map: Dict[str, CryptoAssetCreate] = {}
+
+    # Helper to process a list of assets
+    def process_source(assets: List[CryptoAssetCreate]):
+        for asset in assets:
+            symbol = asset.symbol.upper()
+            # Use symbol as the canonical ID
+            asset.id = symbol
+            unified_map[symbol] = asset
+
+    # Process in reverse priority order so higher priority overwrites lower
+    process_source(csv_data)
+    process_source(paprika_data)
+    process_source(gecko_data)
+
+    return list(unified_map.values())

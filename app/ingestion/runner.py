@@ -49,7 +49,7 @@ def run_etl():
         unified_csv = transformer.transform_csv_data(csv_data)
         loader.update_checkpoint(db, "csv", "success", len(unified_csv))
         
-        all_unified = unified_api + unified_gecko + unified_csv
+        all_unified = transformer.unify_assets(unified_api, unified_gecko, unified_csv)
 
         # 4. Load Unified
         print(f"Loading {len(all_unified)} unified records...")
