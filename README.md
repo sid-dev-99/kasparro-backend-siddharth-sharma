@@ -1,11 +1,11 @@
-# 🚀 Kasparro Backend
+# 🚀 crypto-etl-service
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-009688.svg?style=for-the-badge&logo=fastapi&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-**Kasparro Backend** is a robust, production-ready service designed to ingest, normalize, and serve cryptocurrency data. It aggregates data from multiple sources (CoinPaprika, CoinGecko, CSV), unifies it into a canonical schema, and exposes it via a secure, high-performance REST API.
+**crypto-etl-service Backend** is a robust, production-ready service designed to ingest, normalize, and serve cryptocurrency data. It aggregates data from multiple sources (CoinPaprika, CoinGecko, CSV), unifies it into a canonical schema, and exposes it via a secure, high-performance REST API.
 
 ---
 
